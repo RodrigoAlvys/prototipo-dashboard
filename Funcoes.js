@@ -1,64 +1,63 @@
-const readline = require("readline");
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
+const BASE_URL = "https://jsonplaceholder.typicode.com";
 
-let posts = [];
-function perguntar(pergunta, callback) {
-    rl.question(pergunta, resposta => callback(resposta));
-}
+// Classe baseada no seu diagrama UML para gerenciar Postagens
+class PostService {
+    constructor() {
+        this.posts = [];
+    }
 
-function criar_post() {
-    console.log("\n--- Criar novo Post ---");
-    perguntar("userId: ", userId => {
-        perguntar("id: ", id_post => {
-            perguntar("title: ", title => {
-                perguntar("body: ", body => {
-                    let post = {
-                        userId: parseInt(userId),
-                        id: parseInt(id_post),
-                        title: title,
-                        body: body
-                    };
-                    posts.push(post);
-                    console.log("Post criado com sucesso!\n");
-                    menu();
-                });
-            });
-        });
-    });
-}
-
-function listar_posts() {
-    console.log("\nLista de Posts");
-    if (posts.length === 0) {
-        console.log("Nenhum post criado.");
-    } else {
-        for (let post of posts) {
-            console.log(JSON.stringify(post, null, 4));
-            console.log();
+    // Busca as 20 postagens mais recentes para o Dashboard
+    async fetchRecentPosts() {
+        try {
+            const response = await fetch(`${BASE_URL}/posts?_limit=20`);
+            if (!response.ok) throw new Error("Falha na API");
+            this.posts = await response.json();
+            return this.posts;
+        } catch (error) {
+            console.error("Erro ao listar postagens:", error); 
+            return [];
         }
     }
-    menu();
 }
 
-function menu() {
-    console.log("1 - Criar post");
-    console.log("2 - Listar posts");
-    console.log("3 - Sair");
-    perguntar("Escolha: ", escolha => {
-        if (escolha === "1") {
-            criar_post();
-        } else if (escolha === "2") {
-            listar_posts();
-        } else if (escolha === "3") {
-            rl.close();
-        } else {
-            console.log("Opção inválida.\n");
-            menu();
+// Classe baseada no seu diagrama UML para gerenciar Comentários
+class CommentService {
+    constructor() {
+        this.comments = [];
+    }
+
+    // Busca os 20 comentários mais recentes de uma postagem
+    async fetchCommentsByPost(postId) {
+        try {
+            // O documento pede para listar ao clicar na postagem
+            const response = await fetch(`${BASE_URL}/comments?postId=${postId}&_limit=20`);
+            if (!response.ok) throw new Error("Falha na API");
+            this.comments = await response.json();
+            return this.comments;
+        } catch (error) {
+            console.error("Erro ao listar comentários:", error); 
+            return [];
         }
-    });
+    }
+}
+
+// Exemplo de como usar as funções juntas
+async function carregarDashboard() {
+    const postService = new PostService();
+    const commentService = new CommentService();
+
+    // 1. Lista os posts (Requisito 3.1)
+    const posts = await postService.fetchRecentPosts();
+    console.log("=== DASHBOARD: 20 POSTS ===", posts);
+
+    // 2. Simula clicar no primeiro post para ver comentários (Requisito 3.3)
+    if (posts.length > 0) {
+        const comentarios = await commentService.fetchCommentsByPost(posts[0].id);
+        console.log(`=== COMENTÁRIOS DO POST ${posts[0].id} ===`, comentarios);
+    }
+}
+
+carregarDashboard();
 }
 
 menu();
