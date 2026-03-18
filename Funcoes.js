@@ -1,6 +1,6 @@
 const BASE_URL = "https://jsonplaceholder.typicode.com";
 
-// Classe baseado no UML
+// Classe baseado no diagrama UML
 class PostService {
     constructor() {
         this.posts = [];
