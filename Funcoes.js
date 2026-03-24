@@ -26,7 +26,7 @@ class PostService {
             const matchAuthor = authorId ? post.userId == authorId : true;
             const matchTitle = titleQuery ? post.title.toLowerCase().includes(titleQuery.toLowerCase()) : true;
             const matchKey = keyword ? post.body.toLowerCase().includes(keyword.toLowerCase()) : true;
-            return matchAuthor && matchTitle && matchKey;
+            return matchAuthor && (matchTitle || matchKey);
         });
     }
 }
@@ -55,7 +55,7 @@ class CommentService {
         return this.comments.filter(comment => {
             const matchName = nameQuery ? comment.name.toLowerCase().includes(nameQuery.toLowerCase()) : true;
             const matchKey = keyword ? comment.body.toLowerCase().includes(keyword.toLowerCase()) : true;
-            return matchName && matchKey;
+            return matchName || matchKey;
         });
     }
 }
