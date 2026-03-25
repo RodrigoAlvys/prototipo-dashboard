@@ -41,8 +41,8 @@ O sistema foi modelado com as seguintes classes de serviço baseadas no diagrama
 
 ---
 
-## Linnk
-[Dashboar](https://rodrigoalvys.github.io/prototipo-dashboard/)
+## Link
+[DashBoard Social](https://rodrigoalvys.github.io/prototipo-dashboard/)
 
 ## 👥 Equipe de Desenvolvimento
 
