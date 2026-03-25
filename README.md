@@ -41,6 +41,9 @@ O sistema foi modelado com as seguintes classes de serviço baseadas no diagrama
 
 ---
 
+## Linnk
+[Dashboar](https://rodrigoalvys.github.io/prototipo-dashboard/)
+
 ## 👥 Equipe de Desenvolvimento
 
 * **Davi & Luiz Arthur**: Lógica de Integração com API, Classes de Serviço e Filtros.
